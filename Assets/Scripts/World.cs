@@ -7,7 +7,7 @@ public class World : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        Debug.Log("World Start");
     }
 
     // Update is called once per frame
