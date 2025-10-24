@@ -1,18 +1,25 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
 
-public class World : MonoBehaviour
+public partial class World : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public int sideSize = 11;
+    public Point2D lastPosition = Point2D.Empty;
+    
+    private Vector<bool> worldState;
+    
+    private void Start()
     {
-        Debug.Log("World Start");
+        Debug.Log("Hex Grid Generator Start");
+        CheckSideSize();
+
     }
 
-    // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
-        
+        CheckSideSize();
     }
 }
