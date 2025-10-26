@@ -16,7 +16,12 @@ public partial class World
     {
         return newSideSize;
     }
-    
+
+    private void Initialize()
+    {
+        worldStateHash = new Dictionary<Point2D, bool>();
+        worldStateGameObjects =  new Dictionary<Point2D, GameObject>();
+    }
     
     // Creates Point2D that would be in the cardinal direction
     public static Point2D E(ref Point2D point)
@@ -66,6 +71,37 @@ public partial class World
                SW(ref point1) == point2 || SE(ref point1) == point2;
     }
 
+    public List<Point2D> GetEmptyNeighbors(Point2D point)
+    {
+        var neighbors = new List<Point2D>();
+        
+        if(worldStateHash.ContainsKey(NE(ref point)))
+            if(!worldStateHash[NE(ref point)])
+                neighbors.Add(NE(ref point));
+        
+        if(worldStateHash.ContainsKey(NW(ref point)))
+            if(!worldStateHash[NW(ref point)])
+                neighbors.Add(NW(ref point));
+        
+        if(worldStateHash.ContainsKey(E(ref point)))
+            if(!worldStateHash[E(ref point)])
+                neighbors.Add(E(ref point));
+        
+        if(worldStateHash.ContainsKey(W(ref point)))
+            if(!worldStateHash[W(ref point)])
+                neighbors.Add(W(ref point));
+        
+        if(worldStateHash.ContainsKey(SW(ref point)))
+            if(!worldStateHash[NE(ref point)])
+                neighbors.Add(NE(ref point));
+        
+        if(worldStateHash.ContainsKey(SE(ref point)))
+            if(!worldStateHash[SE(ref point)])
+                neighbors.Add(SE(ref point));
+        
+        return neighbors;
+    }
+    
     private bool CheckSideSize()
     {
         // Clamp the newSideSize
@@ -77,22 +113,35 @@ public partial class World
         {
             sideSize = newSize;
             newSideSize = newSize;
-            worldState = new List<bool>();
-            worldState.Capacity = sideSize * sideSize;
+            
             return true;
         }
 
         return false;
     }
 
+    private void ResetHash()
+    {
+        worldStateHash.Clear();
+        foreach (var hexGameObjectKey in worldStateGameObjects)
+        {
+            GameObject hexGameObject = hexGameObjectKey.Value;
+            Destroy(hexGameObject);
+        }
+    }
     private void CreateHexagonOnPoint(double x, double y)
     {
+        // Add to hash
+        Point2D thePoint = new Point2D((int)Math.Floor(x), (int)Math.Floor(y));
         
-        // Create new gameobject
-        GameObject newHexigonGameObject = new GameObject("Hexagon: " + Math.Floor(x) + ", " + Math.Floor(y));
+        worldStateHash[thePoint] = false;
+        
+        // Create new GameObject
+        GameObject newHexagonGameObject = new GameObject("Hexagon: " + Math.Floor(x) + ", " + Math.Floor(y));
+        worldStateGameObjects[thePoint] = newHexagonGameObject;
         
         // Add image component
-        Image newImage = newHexigonGameObject.AddComponent<Image>();
+        Image newImage = newHexagonGameObject.AddComponent<Image>();
         
         // Check for sprite
         if (hexagonSprite != null)
@@ -101,13 +150,13 @@ public partial class World
         }
         else
         {
-            Debug.LogWarning(newHexigonGameObject.name + " does not have a sprite");
+            Debug.LogWarning(newHexagonGameObject.name + " does not have a sprite");
         }
         
         // Add to canvas
-        newHexigonGameObject.transform.SetParent(targetCanvas.transform, false);
+        newHexagonGameObject.transform.SetParent(targetCanvas.transform, false);
         
-        RectTransform hexagonRectTransform = newHexigonGameObject.GetComponent<RectTransform>();
+        RectTransform hexagonRectTransform = newHexagonGameObject.GetComponent<RectTransform>();
         hexagonRectTransform.anchoredPosition = new Vector2((float)x * hexagonSize, (float)y * hexagonSize);
         hexagonRectTransform.sizeDelta = new Vector2(hexagonSize, hexagonSize);
 

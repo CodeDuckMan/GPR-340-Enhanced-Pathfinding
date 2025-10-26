@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
+using Vector2 = System.Numerics.Vector2;
 
 public partial class World : MonoBehaviour
 {
@@ -12,21 +13,30 @@ public partial class World : MonoBehaviour
     public int newSideSize = 11;
     public float hexagonSize = 100;
     
-    private List<bool> worldState;
+    // true means that the hex is blocked
+    private Dictionary<Point2D, bool> worldStateHash;
+    private Dictionary<Point2D, GameObject> worldStateGameObjects;
+    
     private int sideSize = 11;
     private bool sizeHasChanged = false;
 
     private void Start()
     {
+        Initialize();
+        
         Debug.Log("Hex Grid Generator Start");
         CheckSideSize();
         
         DrawGrid();
 
+        Point2D somePoint = new Point2D(0, 0);
+        List<Point2D> valid = GetEmptyNeighbors(somePoint);
+
     }
 
-    private void FixedUpdate()
+    void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Space))
+            ResetHash();
     }
 }
