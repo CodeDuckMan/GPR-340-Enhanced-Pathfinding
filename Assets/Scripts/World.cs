@@ -6,20 +6,27 @@ using UnityEngine;
 
 public partial class World : MonoBehaviour
 {
-    public int sideSize = 11;
-    public Point2D lastPosition = Point2D.Empty;
+    public Canvas targetCanvas;
+    public Sprite hexagonSprite;
     
-    private Vector<bool> worldState;
+    public int newSideSize = 11;
+    public float hexagonSize = 100;
     
+    private List<bool> worldState;
+    private int sideSize = 11;
+    private bool sizeHasChanged = false;
+
     private void Start()
     {
         Debug.Log("Hex Grid Generator Start");
         CheckSideSize();
+        
+        DrawGrid();
 
     }
 
     private void FixedUpdate()
     {
-        CheckSideSize();
+        
     }
 }

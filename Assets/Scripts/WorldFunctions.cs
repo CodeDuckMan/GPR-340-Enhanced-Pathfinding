@@ -1,18 +1,20 @@
 using System;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public partial class World
 {
     // World constructor
     public World(int size)
     {
-        this.sideSize = size;
+        this.newSideSize = size;
     }
 
     public int GetSideSize()
     {
-        return sideSize;
+        return newSideSize;
     }
     
     
@@ -53,7 +55,7 @@ public partial class World
     // Bool checks
     public bool IsValidPosition(ref Point2D point)
     {
-        float sideOver2 = sideSize / 2;
+        float sideOver2 = newSideSize / 2;
         return point.x >= -sideOver2 && point.x <= sideOver2 && point.y >= -sideOver2 && point.y <= sideOver2;
     }
 
@@ -64,12 +66,65 @@ public partial class World
                SW(ref point1) == point2 || SE(ref point1) == point2;
     }
 
-    private void CheckSideSize()
+    private bool CheckSideSize()
     {
-        int newSize = sideSize;
-        newSize = (newSize / 4) * 4 + 1;
+        // Clamp the newSideSize
+        int newSize = (newSideSize / 4) * 4 + 1;
         if (newSize < 5)
             newSize = 5;
-        sideSize = newSize;
+        
+        if (sideSize != newSize)
+        {
+            sideSize = newSize;
+            newSideSize = newSize;
+            worldState = new List<bool>();
+            worldState.Capacity = sideSize * sideSize;
+            return true;
+        }
+
+        return false;
+    }
+
+    private void CreateHexagonOnPoint(double x, double y)
+    {
+        
+        // Create new gameobject
+        GameObject newHexigonGameObject = new GameObject("Hexagon: " + Math.Floor(x) + ", " + Math.Floor(y));
+        
+        // Add image component
+        Image newImage = newHexigonGameObject.AddComponent<Image>();
+        
+        // Check for sprite
+        if (hexagonSprite != null)
+        {
+            newImage.sprite = hexagonSprite;
+        }
+        else
+        {
+            Debug.LogWarning(newHexigonGameObject.name + " does not have a sprite");
+        }
+        
+        // Add to canvas
+        newHexigonGameObject.transform.SetParent(targetCanvas.transform, false);
+        
+        RectTransform hexagonRectTransform = newHexigonGameObject.GetComponent<RectTransform>();
+        hexagonRectTransform.anchoredPosition = new Vector2((float)x * hexagonSize, (float)y * hexagonSize);
+        hexagonRectTransform.sizeDelta = new Vector2(hexagonSize, hexagonSize);
+
+    }
+
+    private void DrawGrid()
+    {
+        for (int x = -sideSize / 2; x < sideSize / 2; x++)
+        {
+            for (int y = -sideSize / 2;  y < sideSize / 2; y++)
+            {
+                if (y % 2 == 0)
+                    CreateHexagonOnPoint(x,y);
+                
+                else
+                    CreateHexagonOnPoint(x + 0.5,y);
+            }
+        }
     }
 }
