@@ -4,91 +4,58 @@ using System.Collections.Specialized;
 using UnityEngine;
 using Utils;
 
-public class Path : MonoBehaviour
+public class Path
 {
-    
-    public Point2D start = new Point2D();
-    public Point2D end = new Point2D();
-    List<Point2D> path  = new List<Point2D>();
+    public List<Point2D> FindPath(Node start, Node goal, World world) { // swap out world for actual thingy
+        var distances = new Dictionary<Node, float>();
+        var cameFrom = new Dictionary<Node, Node>();
+        var queue = new PriorityQueue<Node, float>();
 
-    public int gregX = 0;
-    public int gregY = 0;
+        distances[start] = 0;
+        queue.Enqueue(start, 0);
 
-    public int larryX = 5;
-    public int larryY = 5;
+        while (queue.Count > 0) 
+        {
+            var current = queue.Dequeue();
+            if (current == goal) 
+            {
+                break;
+            }
 
-    public int leftBound = -10;
-    public int rightBound = 10;
-    public int topBound = -10;
-    public int bottomBound = 10;
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        Point2D agent = new Point2D(gregX, gregY); // placeholder for agent. 
-        end = new Point2D(larryX, larryY);
-        start = agent;
+            foreach (var node in world.getNeighbors) // need to look into this, make a function
+            { 
+                var neighbor = new Node();
+                float newDistance = distances[current]; // + get the cost of current to neighbor
+                // need to make a neighbor variable or function
+                if (!distances.ContainsKey(neighbor) || newDistance < distances[neighbor])
+                {
+                    distances[neighbor] = newDistance;
+                    cameFrom[neighbor] = current;
+                    queue.Enqueue(neighbor, newDistance);
+                }
+            } 
+        }
+
+        return reversePath(cameFrom, start, goal);
     }
-    
-    /*
-     * a struct line segment with 2 functions, one interpolates the other creates the path
-     * 
-     * struct line segment (Point start and point end)
-     * {
-     *      point2D interpolation(float t) {
-     * // need add and multiply, subtract operators
-     * auto delta = end - start
-     * return delta * t + start
-     * }
-     *
-     * Point2D inter2Seg(Point2D p0, Point2D p1, point2D p2, float t) {
-     * lineSegment ls1 = {p0, p1}
-     * lineSegment ls1 = {p1, p2}
-     *
-     * Point2D pt1 = ls1.interpolation(t)
-     * Point2D pt2 = ls2.interpolation(t)
-     *
-     * LineSegment lsFinal = {pt1, pt2}
-     *
-     * return lsFinal.interpolation
-     * }
-     *
-     *
-     * 
-     * }
-     */
 
-    // Update is called once per frame
-    void Update()
+    public List<Point2D> reversePath(Dictionary<Node, Node> path, Node first, Node last) 
     {
+        List<Point2D> newPath = new();
+        Node current = last;
         
-    }
+        while (current != first) 
+        {
+            newPath.Add(current.Position);
+            if (!path.ContainsKey(current)) 
+            {
+                return new List<Point2D>();
+            }
+            current = path[current];
+        }
 
-    void StartPathfinding(Point2D start, Point2D end)
-    {
-        PriorityQueue<Point2D, Point2D> something; 
-
-        // get startingPoint (agent)
-        // get size of grid (to make goal point)
-    }
-
-    void printPath()
-    {
-        
-    }
-
-    void resetPath()
-    {
-        path = new List<Point2D>();
-    }
-
-    void calculateHerustic() 
-    { 
-    
-    }
-
-    void showFlowField() 
-    { 
-    
+        newPath.Add(first.Position);
+        newPath.Reverse();
+        return newPath;
     }
 }
