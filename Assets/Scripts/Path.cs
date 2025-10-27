@@ -23,7 +23,7 @@ public class Path
                 break;
             }
 
-            foreach (var neighbor in getNeighbors(current)) // need to look into this, make a function
+            foreach (var neighbor in getNeighbors(current, world)) // need to look into this, make a function
             {
                 float newDistance = distances[current] + 1; // + get the cost of current to neighbor
                 // need to make a neighbor variable or function
@@ -59,7 +59,7 @@ public class Path
         return newPath;
     }
 
-    public List<Node> getNeighbors(Node node)
+    public List<Node> getNeighbors(Node node, World world)
     {
         List<Node> neighbors = new List<Node>();
         List<Point2D> neighborPos = new List<Point2D>();
@@ -73,7 +73,7 @@ public class Path
 
         foreach (Point2D p in neighborPos) 
         {
-            if (!checkPosition(p))
+            if (!checkPosition(p, world))
             {
                 neighborPos.Remove(p);
             }
@@ -88,8 +88,9 @@ public class Path
         return neighbors;
     }
 
-    public bool checkPosition(Point2D position) 
+    public bool checkPosition(Point2D position, World world) // 0,0 is in the middle. 
     {
+        // fix this and use world to get the correct data. 
         if (position.x < 0 || position.y < 0) 
         {
             return false;
@@ -99,6 +100,7 @@ public class Path
         {
             return false;
         }
+        
         
         position.GetType(); // look into this and what it does
 
