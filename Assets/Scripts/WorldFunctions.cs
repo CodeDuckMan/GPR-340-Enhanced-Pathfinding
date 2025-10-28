@@ -58,6 +58,11 @@ public partial class World
     }
     
     // Bool checks
+
+    public bool getPointState(Point2D point)
+    {
+        return worldStateHash[point];
+    }
     public bool IsValidPosition(ref Point2D point)
     {
         float sideOver2 = newSideSize / 2;
