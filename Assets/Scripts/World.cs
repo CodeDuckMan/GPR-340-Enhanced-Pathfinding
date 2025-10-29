@@ -15,12 +15,12 @@ public partial class World : MonoBehaviour
     
     // true means that the hex is blocked
     private Dictionary<Point2D, bool> worldStateHash;
-    private Dictionary<Point2D, GameObject> worldStateGameObjects;
+    public Dictionary<Point2D, GameObject> worldStateGameObjects;
     
     private int sideSize = 11;
     private bool sizeHasChanged = false;
 
-    private void Start()
+    private void Awake()
     {
         Initialize();
         
