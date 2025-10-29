@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class Node 
 {
+    public Node(Point2D Pos) 
+    { 
+        Position = Pos;
+    }
+
     public Point2D Position = new();
-    public List<Node> Neighbors = new();
-    public Dictionary<Node, float> Costs = new();
 }
