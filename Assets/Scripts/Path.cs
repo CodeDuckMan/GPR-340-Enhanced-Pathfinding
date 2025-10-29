@@ -7,19 +7,23 @@ using Utils;
 
 public class Path
 {
-    public List<Point2D> FindPath(Node start, Node goal, World world)
-    { 
+    public List<Point2D> FindPath(Point2D start, Point2D goal, World world)
+    {
+        Node startNode = new Node(start);
+        Node goalNode = new Node(goal);
+
         var distances = new Dictionary<Node, float>();
         var cameFrom = new Dictionary<Node, Node>();
         var queue = new PriorityQueue<Node, float>(); // setting variables here.
+        
 
-        distances[start] = 0;
-        queue.Enqueue(start, 0); // setting the start point. 
+        distances[startNode] = 0;
+        queue.Enqueue(startNode, 0); // setting the start point. 
 
         while (queue.Count > 0) // while there is something in the queue.
         {
             var current = queue.Dequeue(); // checking the one we are taking off the queue.
-            if (current == goal) // if we find a goal space. Stop searching.
+            if (current == goalNode) // if we find a goal space. Stop searching.
             {
                 break;
             }
@@ -36,7 +40,7 @@ public class Path
             }
         }
 
-        return ReversePath(cameFrom, start, goal); // returns a path after search is finished. 
+        return ReversePath(cameFrom, startNode, goalNode); // returns a path after search is finished. 
     }
 
     private List<Point2D> ReversePath(Dictionary<Node, Node> path, Node first, Node last)
@@ -79,11 +83,8 @@ public class Path
                 neighborPos.Remove(p); // if so remove it from the neighbors list.
             }
             else 
-            { 
-                Node neighbor = new Node // else adds it to a neighbor list. 
-                {
-                    Position = p
-                }; 
+            {
+                Node neighbor = new Node(p); // else adds it to a neighbor list. 
                 neighbors.Add(neighbor); 
             }
         }
