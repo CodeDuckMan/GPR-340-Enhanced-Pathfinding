@@ -76,6 +76,7 @@ public partial class World
                SW(ref point1) == point2 || SE(ref point1) == point2;
     }
 
+    // Public functions
     public List<Point2D> GetEmptyNeighbors(Point2D point)
     {
         var neighbors = new List<Point2D>();
@@ -107,6 +108,7 @@ public partial class World
         return neighbors;
     }
     
+    // Private functions
     private bool CheckSideSize()
     {
         // Clamp the newSideSize
@@ -124,7 +126,30 @@ public partial class World
 
         return false;
     }
+    public Point2D GetClosestPointOnPath(RectTransform pointPosition, List<Point2D> path, Dictionary<Point2D, GameObject> gameObjectsByPoint2D)
+    {
+        Point2D closestPoint = new Point2D();
 
+        float closestDistance = float.MaxValue;
+        float distance = 0;
+
+        for (int i = 0; i < path.Count; i++)
+        {
+            float num1 = pointPosition.transform.position.x - gameObjectsByPoint2D[path[i]].transform.position.x;
+            float num2 = pointPosition.transform.position.y - gameObjectsByPoint2D[path[i]].transform.position.y;
+            distance = (float)Math.Sqrt((double) num1 * (double) num1 + (double) num2 * (double) num2);
+            
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestPoint = path[i];
+            }
+        }
+        
+        return closestPoint;
+    }
+    
+    // Private functions
     private void ResetHash()
     {
         worldStateHash.Clear();
@@ -160,6 +185,7 @@ public partial class World
         
         // Add to canvas
         newHexagonGameObject.transform.SetParent(targetCanvas.transform, false);
+        newHexagonGameObject.transform.SetAsFirstSibling();
         
         RectTransform hexagonRectTransform = newHexagonGameObject.GetComponent<RectTransform>();
         hexagonRectTransform.anchoredPosition = new Vector2((float)x * hexagonSize, (float)y * hexagonSize);
@@ -181,4 +207,6 @@ public partial class World
             }
         }
     }
+
+    
 }

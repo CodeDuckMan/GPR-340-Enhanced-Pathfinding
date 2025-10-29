@@ -19,6 +19,8 @@ public struct Point2D
     public static Point2D operator -(Point2D operand) => new Point2D(-operand.x, -operand.y); // For negative
     public static Point2D operator +(Point2D left, Point2D right) => new Point2D(left.x + right.x, left.y + right.y);
     public static Point2D operator -(Point2D left, Point2D right) => left + (-right);
+    public static Point2D operator *(Point2D operand, int num) => new Point2D(operand.x * num, operand.y * num);
+    public static Point2D operator /(Point2D operand, int num) => new Point2D(operand.x / num, operand.y / num);
     
     // We cannot do =+ or -= because we are not working in a version older than 14.0
     
