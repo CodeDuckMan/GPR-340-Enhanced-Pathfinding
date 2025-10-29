@@ -1,109 +1,99 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using UnityEngine;
 using Utils;
 
 public class Path
 {
-    public List<Point2D> FindPath(Node start, Node goal, World world)
-    { // swap out world for actual thingy
+    public List<Point2D> FindPath(Point2D start, Point2D goal, World world)
+    {
+        Node startNode = new Node(start);
+        Node goalNode = new Node(goal);
+
         var distances = new Dictionary<Node, float>();
         var cameFrom = new Dictionary<Node, Node>();
-        var queue = new PriorityQueue<Node, float>();
+        var queue = new PriorityQueue<Node, float>(); // setting variables here.
+        
 
-        distances[start] = 0;
-        queue.Enqueue(start, 0);
+        distances[startNode] = 0;
+        queue.Enqueue(startNode, 0); // setting the start point. 
 
-        while (queue.Count > 0)
+        while (queue.Count > 0) // while there is something in the queue.
         {
-            var current = queue.Dequeue();
-            if (current == goal)
+            var current = queue.Dequeue(); // checking the one we are taking off the queue.
+            if (current == goalNode) // if we find a goal space. Stop searching.
             {
                 break;
             }
 
-            foreach (var neighbor in getNeighbors(current, world)) // need to look into this, make a function
+            foreach (var neighbor in GetNeighbors(current, world)) // get the neighbors of the point.
             {
-                float newDistance = distances[current] + 1; // + get the cost of current to neighbor
-                // need to make a neighbor variable or function
-                if (!distances.ContainsKey(neighbor) || newDistance < distances[neighbor])
-                {
-                    distances[neighbor] = newDistance;
+                float newDistance = distances[current] + 1; // add cost to path.
+                if (!distances.ContainsKey(neighbor) || newDistance < distances[neighbor]) // checks cost and neighbors.
+                { 
+                    distances[neighbor] = newDistance; 
                     cameFrom[neighbor] = current;
-                    queue.Enqueue(neighbor, newDistance);
+                    queue.Enqueue(neighbor, newDistance); // sets data and cost then enqueues it.
                 }
             }
         }
 
-        return reversePath(cameFrom, start, goal);
+        return ReversePath(cameFrom, startNode, goalNode); // returns a path after search is finished. 
     }
 
-    public List<Point2D> reversePath(Dictionary<Node, Node> path, Node first, Node last)
+    private List<Point2D> ReversePath(Dictionary<Node, Node> path, Node first, Node last)
     {
-        List<Point2D> newPath = new();
-        Node current = last;
+        List<Point2D> newPath = new(); // setting variables.
+        Node current = last; 
 
-        while (current != first)
+        while (current != first) // will check the list backwards until it reaches the start node.
         {
             newPath.Add(current.Position);
-            if (!path.ContainsKey(current))
+            if (!path.TryGetValue(current, out var value)) // if it cant make a path then return empty.
             {
                 return new List<Point2D>();
             }
-            current = path[current];
+            current = value;
         }
 
-        newPath.Add(first.Position);
-        newPath.Reverse();
-        return newPath;
+        newPath.Add(first.Position); 
+        newPath.Reverse(); 
+        return newPath; // once finished returns the path. 
     }
 
-    public List<Node> getNeighbors(Node node, World world)
+    private List<Node> GetNeighbors(Node node, World world)
     {
-        List<Node> neighbors = new List<Node>();
-        List<Point2D> neighborPos = new List<Point2D>();
-
-        neighborPos.Add(World.NE(ref node.Position));
-        neighborPos.Add(World.E(ref node.Position));
-        neighborPos.Add(World.SE(ref node.Position));
-        neighborPos.Add(World.SW(ref node.Position));
-        neighborPos.Add(World.W(ref node.Position));
-        neighborPos.Add(World.NW(ref node.Position));
-
-        foreach (Point2D p in neighborPos) 
+        List<Node> neighbors = new List<Node>(); // sets a base neighbor list.
+        List<Point2D> neighborPos = new List<Point2D> // sets a base neighbor position list.
         {
-            if (!checkPosition(p, world))
+            World.NE(ref node.Position),
+            World.E(ref node.Position),
+            World.SE(ref node.Position),
+            World.SW(ref node.Position),
+            World.W(ref node.Position),
+            World.NW(ref node.Position)
+        };
+
+        foreach (Point2D p in neighborPos.ToList()) // this will remove any invalid neighbors.
+        {
+            if (!CheckPosition(p, world)) // checks if point is out of bounds or on a wall. 
             {
-                neighborPos.Remove(p);
+                neighborPos.Remove(p); // if so remove it from the neighbors list.
             }
             else 
-            { 
-                Node neighbor = new Node();
-                neighbor.Position = p;
-                neighbors.Add(neighbor);
+            {
+                Node neighbor = new Node(p); // else adds it to a neighbor list. 
+                neighbors.Add(neighbor); 
             }
         }
 
         return neighbors;
     }
 
-    public bool checkPosition(Point2D position, World world) // 0,0 is in the middle. 
+    private bool CheckPosition(Point2D position, World world) 
     {
-        // fix this and use world to get the correct data. 
-        if (position.x < 0 || position.y < 0) 
-        {
-            return false;
-        }
-
-        if (position.x > 10 || position.y > 10) 
-        {
-            return false;
-        }
-        
-        
-        position.GetType(); // look into this and what it does
-
-        return true;
+        return world.IsValidPosition(ref position) && (!world.getPointState(position));
     }
 }
