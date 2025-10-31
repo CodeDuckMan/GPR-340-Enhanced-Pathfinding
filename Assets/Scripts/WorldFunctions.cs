@@ -148,6 +148,11 @@ public partial class World
         
         return closestPoint;
     }
+
+    public void SetPointColor(Point2D point, Color color)
+    {
+        worldStateGameObjects[point].GetComponent<Image>().color = color;
+    }
     
     // Private functions
     private void ResetHash()

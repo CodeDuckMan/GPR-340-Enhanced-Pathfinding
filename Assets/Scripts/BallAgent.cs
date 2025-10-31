@@ -6,9 +6,10 @@ public class BallAgent : MonoBehaviour
 {
     public float speed = 10.0f;
     public GameObject GridMaker;
-    public World worldScript;
     private Dictionary<Point2D, GameObject> _worldStateGameObjects;
+    [SerializeField] private World worldScript;
     [SerializeField] private List<Point2D> _currentPath;
+    [SerializeField] private Point2D currentTargetPoint;
     private RectTransform _baTransform;
     
     void Start()
@@ -19,13 +20,21 @@ public class BallAgent : MonoBehaviour
         _worldStateGameObjects = worldScript.worldStateGameObjects;
         
         _currentPath.Add(new Point2D(-3, 0));
+        worldScript.SetPointColor(new Point2D(-3, 0), Color.magenta);
         _currentPath.Add(new Point2D(-2, 0));
+        worldScript.SetPointColor(new Point2D(-2, 0), Color.magenta);
         _currentPath.Add(new Point2D(-1, 0));
+        worldScript.SetPointColor(new Point2D(-1, 0), Color.magenta);
         _currentPath.Add(new Point2D(0, 0));
+        worldScript.SetPointColor(new Point2D(0, 0), Color.magenta);
         _currentPath.Add(new Point2D(0, 1));
+        worldScript.SetPointColor(new Point2D(0, 1), Color.magenta);
         _currentPath.Add(new Point2D(0, 2));
+        worldScript.SetPointColor(new Point2D(0, 2), Color.magenta);
         _currentPath.Add(new Point2D(0, 3));
-        _currentPath.Add(new Point2D(-1, 4));
+        worldScript.SetPointColor(new Point2D(0, 3), Color.magenta);
+        _currentPath.Add(new Point2D(0, 4));
+        worldScript.SetPointColor(new Point2D(0, 4), Color.magenta);
         
 
     }
