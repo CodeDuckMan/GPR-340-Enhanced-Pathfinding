@@ -3,21 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class ConvertInput : MonoBehaviour
+public static class ConvertInput
 {
-    public TMP_InputField inputField;
-
-    public void IntakeCoordinates() 
+    public static Point2D IntakeCoordinates(string input) 
     { 
-        string input = inputField.text.Trim();
         string[] parts = input.Split(',');
         if (parts.Length == 2 && int.TryParse(parts[0], out int xPos) && int.TryParse(parts[1], out int yPos))
         {
             Point2D startPoint = new Point2D(xPos, yPos);
+            Debug.Log("Point works " + startPoint.x.ToString() + "'" + startPoint.y.ToString());
+            return startPoint;
         }
         else 
         {
-            inputField.text = "Error";
+            Debug.Log("Error with coords");
+            return new Point2D();
         }
+        
     }
 }

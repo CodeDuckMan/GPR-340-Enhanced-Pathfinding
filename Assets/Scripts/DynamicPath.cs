@@ -14,31 +14,53 @@ public class DynamicPath : MonoBehaviour
     Path pathf;
 
     public Button pathingButton;
-    public TMP_InputField inputField;
+    public TMP_InputField startInput;
+    public TMP_InputField goalInput;
 
 
 
     // Start is called before the first frame update
     void Start()
     {
-        pathingButton.onClick.AddListener(getNewPath);   
+        pathingButton.onClick.AddListener(createPath);
+        startInput.onSubmit.AddListener(readStartInput);
+        goalInput.onSubmit.AddListener(readGoalInput);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (path == null) 
-        { 
-            getNewPath();
-        }
+       
     }
 
-    void getNewPath() 
+    void readGoalInput(string userText) 
     {
-        if (start == null || end == null) 
+        Debug.Log("Beans");
+        end = ConvertInput.IntakeCoordinates(userText);
+    }
+
+    void readStartInput(string userText) 
+    {
+        Debug.Log("Memes");
+        start = ConvertInput.IntakeCoordinates(userText);
+    }
+
+    void createPath() 
+    {
+        if (start == new Point2D(0, 0) || end == new Point2D(0, 0))
         {
+            Debug.Log("Error: unanitialized coordinates or both just (0,0)");
             return;
         }
-        path = pathf.FindPath(start, end, world);
+        else if (start == end) 
+        {
+            Debug.Log("Error: coordinates are the same");
+            return;
+        }
+        else
+        {
+            Debug.Log("Coordiantes Acceptable with Start: " + start.x.ToString() + "'" + start.y.ToString() + " and goal: " + end.x.ToString() + "'" + end.y.ToString());
+            // path = pathf.FindPath(start, end, world);
+        }
     }
 }
