@@ -15,6 +15,7 @@ public class Path
         var distances = new Dictionary<Node, float>();
         var cameFrom = new Dictionary<Node, Node>();
         var queue = new PriorityQueue<Node, float>(); // setting variables here.
+        var visited = new List<Point2D>();
         
 
         distances[startNode] = 0;
@@ -27,8 +28,9 @@ public class Path
             {
                 break;
             }
+            visited.Add(current.Position);
 
-            foreach (var neighbor in GetNeighbors(current, world)) // get the neighbors of the point.
+            foreach (var neighbor in GetNeighbors(current, visited, world)) // get the neighbors of the point.
             {
                 float newDistance = distances[current] + 1; // add cost to path.
                 if (!distances.ContainsKey(neighbor) || newDistance < distances[neighbor]) // checks cost and neighbors.
@@ -63,37 +65,20 @@ public class Path
         return newPath; // once finished returns the path. 
     }
 
-    private List<Node> GetNeighbors(Node node, World world)
+    private List<Node> GetNeighbors(Node node, List<Point2D> visited, World world)
     {
-        List<Node> neighbors = new List<Node>(); // sets a base neighbor list.
-        List<Point2D> neighborPos = new List<Point2D> // sets a base neighbor position list.
+        List<Point2D> possibleNeighbors = world.GetEmptyNeighbors(node.Position);
+        List<Node> neighbors = new List<Node>();
+        
+        foreach (Point2D p in possibleNeighbors)
         {
-            World.NE(ref node.Position),
-            World.E(ref node.Position),
-            World.SE(ref node.Position),
-            World.SW(ref node.Position),
-            World.W(ref node.Position),
-            World.NW(ref node.Position)
-        };
-
-        foreach (Point2D p in neighborPos.ToList()) // this will remove any invalid neighbors.
-        {
-            if (!CheckPosition(p, world)) // checks if point is out of bounds or on a wall. 
+            if (visited.Contains(p))
             {
-                neighborPos.Remove(p); // if so remove it from the neighbors list.
+                continue;
             }
-            else 
-            {
-                Node neighbor = new Node(p); // else adds it to a neighbor list. 
-                neighbors.Add(neighbor); 
-            }
+            neighbors.Add(new Node(p));
         }
-
+        // sets a base neighbor list.
         return neighbors;
-    }
-
-    private bool CheckPosition(Point2D position, World world) 
-    {
-        return world.IsValidPosition(ref position) && (!world.getPointState(position));
     }
 }
