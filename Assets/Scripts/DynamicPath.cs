@@ -10,8 +10,9 @@ public class DynamicPath : MonoBehaviour
     List<Point2D> path = new List<Point2D>();
     Point2D start;
     Point2D end;
-    public World world; // get this somehow
-    Path pathf;
+
+    World world; 
+    Path pathMaker = new Path();
 
     public Button pathingButton;
     public TMP_InputField startInput;
@@ -22,6 +23,7 @@ public class DynamicPath : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        world = GameObject.Find("GridMaker").GetComponent<World>();
         pathingButton.onClick.AddListener(createPath);
         startInput.onSubmit.AddListener(readStartInput);
         goalInput.onSubmit.AddListener(readGoalInput);
@@ -35,13 +37,11 @@ public class DynamicPath : MonoBehaviour
 
     void readGoalInput(string userText) 
     {
-        Debug.Log("Beans");
         end = ConvertInput.IntakeCoordinates(userText);
     }
 
     void readStartInput(string userText) 
     {
-        Debug.Log("Memes");
         start = ConvertInput.IntakeCoordinates(userText);
     }
 
@@ -60,7 +60,11 @@ public class DynamicPath : MonoBehaviour
         else
         {
             Debug.Log("Coordiantes Acceptable with Start: " + start.x.ToString() + "'" + start.y.ToString() + " and goal: " + end.x.ToString() + "'" + end.y.ToString());
-            // path = pathf.FindPath(start, end, world);
-        }
+            path = pathMaker.FindPath(start, end, world);
+            foreach (var point in path) 
+            {
+                Debug.Log("The next point in the path is: " + point.ToString());
+            }
+        }      
     }
 }
