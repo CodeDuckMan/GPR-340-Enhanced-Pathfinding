@@ -11,12 +11,12 @@ public static class ConvertInput
         if (parts.Length == 2 && int.TryParse(parts[0], out int xPos) && int.TryParse(parts[1], out int yPos))
         {
             Point2D startPoint = new Point2D(xPos, yPos);
-            Debug.Log("Point works " + startPoint.x.ToString() + "'" + startPoint.y.ToString());
+            Debug.Log("Inputted: " + startPoint.x.ToString() + "'" + startPoint.y.ToString());
             return startPoint;
         }
         else 
         {
-            Debug.Log("Error with coords");
+            Debug.Log("Error with input: please use x,y format.");
             return new Point2D();
         }
         

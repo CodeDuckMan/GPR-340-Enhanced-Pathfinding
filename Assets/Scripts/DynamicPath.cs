@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,47 +25,48 @@ public class DynamicPath : MonoBehaviour
     void Start()
     {
         world = GameObject.Find("GridMaker").GetComponent<World>();
-        pathingButton.onClick.AddListener(createPath);
-        startInput.onSubmit.AddListener(readStartInput);
-        goalInput.onSubmit.AddListener(readGoalInput);
+        pathingButton.onClick.AddListener(CreatePath);
+        startInput.onSubmit.AddListener(ReadStartInput);
+        goalInput.onSubmit.AddListener(ReadGoalInput);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-       
-    }
-
-    void readGoalInput(string userText) 
+    void ReadGoalInput(string userText) 
     {
         end = ConvertInput.IntakeCoordinates(userText);
+        if (!world.IsValidPosition(ref end))
+        {
+            Debug.Log("Warning: coordinates are not valid");
+        }
     }
 
-    void readStartInput(string userText) 
+    void ReadStartInput(string userText) 
     {
         start = ConvertInput.IntakeCoordinates(userText);
+        if (!world.IsValidPosition(ref start))
+        {
+            Debug.Log("Warning: coordinates are not valid");
+        }
     }
 
-    void createPath() 
+    void CreatePath() 
     {
-        if (start == new Point2D(0, 0) || end == new Point2D(0, 0))
+        if (!world.IsValidPosition(ref start) || !world.IsValidPosition(ref end))
         {
-            Debug.Log("Error: unanitialized coordinates or both just (0,0)");
-            return;
+            Debug.Log("Error: one or both coordinates are invalid.");
         }
         else if (start == end) 
         {
             Debug.Log("Error: coordinates are the same");
-            return;
         }
         else
         {
-            Debug.Log("Coordiantes Acceptable with Start: " + start.x.ToString() + "'" + start.y.ToString() + " and goal: " + end.x.ToString() + "'" + end.y.ToString());
+            Debug.Log("Coordinates Acceptable with Start: " + $"Point2D: {start.x}, {start.y}" + " and goal: " + $"Point2D: {end.x}, {end.y}");
             path = pathMaker.FindPath(start, end, world);
             foreach (var point in path) 
             {
-                Debug.Log("The next point in the path is: " + point.ToString());
+                Debug.Log($"Point2D: {point.x}, {point.y}");
             }
+            Debug.Log("Path Finished");
         }      
     }
 }
