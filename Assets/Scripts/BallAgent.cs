@@ -1,14 +1,17 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class BallAgent : MonoBehaviour
 {
     public float speed = 10.0f;
-    public GameObject GridMaker;
+    public GameObject gridMaker;
+    public Canvas targetCanvas;
     private Dictionary<Point2D, GameObject> _worldStateGameObjects;
     [SerializeField] private World worldScript;
     [SerializeField] private List<Point2D> _currentPath;
@@ -20,9 +23,13 @@ public class BallAgent : MonoBehaviour
     
     void Start()
     {
+        gridMaker = GameObject.Find("GridMaker");
+        targetCanvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+        
         _currentPath = new List<Point2D>();
         _baTransform = GetComponent<RectTransform>();
-        worldScript = GridMaker.GetComponent<World>();
+        
+        worldScript = gridMaker.GetComponent<World>();
         _worldStateGameObjects = worldScript.worldStateGameObjects;
         
         _currentPath.Add(new Point2D(-3, 0));
@@ -46,6 +53,11 @@ public class BallAgent : MonoBehaviour
         Image newImage = targetPoint.AddComponent<Image>();
         newImage.sprite = targetSprite;
 
+        RectTransform startPointTransform = _worldStateGameObjects[_currentPath.First()].GetComponent<RectTransform>();
+        _baTransform.localPosition = startPointTransform.localPosition;
+
+        this.transform.SetParent(targetCanvas.transform, false);
+        this.transform.SetAsLastSibling();
     }
 
     void FixedUpdate()
