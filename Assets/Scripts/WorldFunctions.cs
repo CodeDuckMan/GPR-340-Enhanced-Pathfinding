@@ -98,8 +98,8 @@ public partial class World
                 neighbors.Add(W(ref point));
         
         if(worldStateHash.ContainsKey(SW(ref point)))
-            if(!worldStateHash[NE(ref point)])
-                neighbors.Add(NE(ref point));
+            if(!worldStateHash[SW(ref point)])
+                neighbors.Add(SW(ref point));
         
         if(worldStateHash.ContainsKey(SE(ref point)))
             if(!worldStateHash[SE(ref point)])
