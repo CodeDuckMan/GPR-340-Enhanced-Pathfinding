@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748171, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1837,7 +1837,7 @@ RectTransform:
   m_Children:
   - {fileID: 709482008}
   m_Father: {fileID: 998985234}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -1963,7 +1963,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -469.2, y: -245.5}
+  m_AnchoredPosition: {x: -336, y: -192}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1251141212
@@ -2307,7 +2307,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4241837980317c64c86b1cb1b4b1fd0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  world: {fileID: 0}
   pathingButton: {fileID: 1111138548}
   startInput: {fileID: 779721533}
   goalInput: {fileID: 1104302875}

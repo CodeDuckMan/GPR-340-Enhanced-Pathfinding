@@ -25,7 +25,7 @@ public class DynamicPath : MonoBehaviour
     void Start()
     {
         world = GameObject.Find("GridMaker").GetComponent<World>();
-        pathingButton.onClick.AddListener(CreatePath);
+        pathingButton.onClick.AddListener(() => CreatePath());
         startInput.onSubmit.AddListener(ReadStartInput);
         goalInput.onSubmit.AddListener(ReadGoalInput);
     }
@@ -48,15 +48,17 @@ public class DynamicPath : MonoBehaviour
         }
     }
 
-    void CreatePath() 
+    public List<Point2D> CreatePath() 
     {
         if (!world.IsValidPosition(ref start) || !world.IsValidPosition(ref end))
         {
             Debug.Log("Error: one or both coordinates are invalid.");
+            return  null;
         }
         else if (start == end) 
         {
             Debug.Log("Error: coordinates are the same");
+            return null;
         }
         else
         {
@@ -67,6 +69,7 @@ public class DynamicPath : MonoBehaviour
                 Debug.Log($"Point2D: {point.x}, {point.y}");
             }
             Debug.Log("Path Finished");
-        }      
+        }     
+        return path;
     }
 }

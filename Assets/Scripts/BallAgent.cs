@@ -20,11 +20,14 @@ public class BallAgent : MonoBehaviour
     [SerializeField] private Sprite targetSprite;
     [SerializeField] private GameObject targetPoint;
     private RectTransform _baTransform;
+    private DynamicPath _dynamicPath;
     
     void Start()
     {
         gridMaker = GameObject.Find("GridMaker");
         targetCanvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+
+        _dynamicPath = GameObject.Find("PathSmothingGen").GetComponent<DynamicPath>();
         
         _currentPath = new List<Point2D>();
         _baTransform = GetComponent<RectTransform>();
@@ -32,6 +35,7 @@ public class BallAgent : MonoBehaviour
         worldScript = gridMaker.GetComponent<World>();
         _worldStateGameObjects = worldScript.worldStateGameObjects;
         
+        /*
         _currentPath.Add(new Point2D(-3, 0));
         worldScript.SetPointColor(new Point2D(-3, 0), Color.magenta);
         _currentPath.Add(new Point2D(-2, 0));
@@ -48,7 +52,14 @@ public class BallAgent : MonoBehaviour
         worldScript.SetPointColor(new Point2D(0, 3), Color.magenta);
         _currentPath.Add(new Point2D(0, 4));
         worldScript.SetPointColor(new Point2D(0, 4), Color.magenta);
+        */
         
+        _currentPath = _dynamicPath.CreatePath();
+        foreach (Point2D point in _currentPath)
+        {
+            worldScript.SetPointColor(point, Color.magenta);
+        }
+
         targetPoint = new GameObject("Target" );
         Image newImage = targetPoint.AddComponent<Image>();
         newImage.sprite = targetSprite;
