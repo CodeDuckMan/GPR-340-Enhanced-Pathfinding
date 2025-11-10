@@ -12,6 +12,7 @@ public partial class World : MonoBehaviour
     
     public int newSideSize = 11;
     public float hexagonSize = 100;
+    public int wallSpawnChance = 10;
     
     // true means that the hex is blocked
     private Dictionary<Point2D, bool> worldStateHash;

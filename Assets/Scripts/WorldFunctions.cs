@@ -215,6 +215,12 @@ public partial class World
                 
                 else
                     CreateHexagonOnPoint(x + 0.5,y);
+                
+                int randChance = UnityEngine.Random.Range(0, 100);
+                if (randChance <= wallSpawnChance)
+                    SetWallState(new Point2D(x, y), true);
+                    
+                
             }
         }
     }

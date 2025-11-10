@@ -2358,6 +2358,7 @@ MonoBehaviour:
   hexagonSprite: {fileID: 21300000, guid: 2b9aa9e64980ea14880be1ede017a567, type: 3}
   newSideSize: 13
   hexagonSize: 30
+  wallSpawnChance: 10
 --- !u!1 &2111853829
 GameObject:
   m_ObjectHideFlags: 0
