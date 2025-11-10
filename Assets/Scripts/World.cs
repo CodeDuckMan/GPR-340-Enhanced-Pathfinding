@@ -28,7 +28,7 @@ public partial class World : MonoBehaviour
         CheckSideSize();
         
         DrawGrid();
-
+        
         Point2D somePoint = new Point2D(0, 0);
         List<Point2D> valid = GetEmptyNeighbors(somePoint);
 

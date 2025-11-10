@@ -198,6 +198,12 @@ public partial class World
 
     }
 
+    public void SetWallState(Point2D point, bool isBlocked)
+    {
+        this.worldStateHash[point] = isBlocked;
+        SetPointColor(point, Color.gray);
+    }
+    
     private void DrawGrid()
     {
         for (int x = -sideSize / 2; x < (sideSize / 2) + 1; x++)
