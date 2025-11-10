@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-    public GameObject sphere;
+    public GameObject newObject;
 
     public void SpawnObject()
     {
-        Instantiate(sphere);
+        Instantiate(newObject);
     }
 }

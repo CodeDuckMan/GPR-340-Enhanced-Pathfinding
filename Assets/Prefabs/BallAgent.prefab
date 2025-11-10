@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 49277465526311515}
   - component: {fileID: 49277465526311513}
   - component: {fileID: 49277465526311518}
-  - component: {fileID: 49277465526311519}
+  - component: {fileID: 666251042408123321}
   m_Layer: 5
   m_Name: BallAgent
   m_TagString: Untagged
@@ -77,7 +77,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &49277465526311519
+--- !u!114 &666251042408123321
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -89,9 +89,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab8e6a1b685259e4085bb974990c1dc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 30
+  speed: 10
   gridMaker: {fileID: 0}
   targetCanvas: {fileID: 0}
   worldScript: {fileID: 0}
-  targetSprite: {fileID: 21300000, guid: a6fbd5a181bc51e42a61a73fe8d727c8, type: 3}
+  targetSprite: {fileID: 21300000, guid: 0525793900d728a42936791a8a6de63b, type: 3}
   targetPoint: {fileID: 0}
