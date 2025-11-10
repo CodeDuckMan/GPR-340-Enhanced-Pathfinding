@@ -1,10 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Utils;
 
 public class DynamicPath : MonoBehaviour
 {
