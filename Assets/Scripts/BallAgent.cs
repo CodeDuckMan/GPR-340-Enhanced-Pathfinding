@@ -51,33 +51,18 @@ public class BallAgent : MonoBehaviour
         
         worldScript = gridMaker.GetComponent<World>();
         _worldStateGameObjects = worldScript.worldStateGameObjects;
-        
-        _currentPath = _dynamicPath.CreatePath();
-        
-        // Check if path exists
 
-        if (_currentPath == null)
-        {
-            Debug.LogError("Path does not exist");
-            Destroy(gameObject);
-        }
-        else
-        {
-            foreach (Point2D point in _currentPath)
-            {
-                worldScript.SetPointColor(point, Color.magenta);
-            }
-
-            RectTransform startPointTransform = _worldStateGameObjects[_currentPath.First()].GetComponent<RectTransform>();
-            _baTransform.localPosition = startPointTransform.localPosition;
-
-            this.transform.SetParent(targetCanvas.transform, false);
-            this.transform.SetAsLastSibling();
-        }
+        setPath();
     }
 
     void FixedUpdate()
     {
+        if (_dynamicPath.WallsChanged())
+        {
+            setPath();
+            _dynamicPath.wallCreated = false;
+        }
+
         FollowPath(_currentPath);
     }
 
@@ -95,6 +80,58 @@ public class BallAgent : MonoBehaviour
 
         _baTransform.position = Vector3.MoveTowards(_baTransform.position, _worldStateGameObjects[_nextPointOnPath].transform.position, speed * Time.deltaTime);
         
+    }
+
+    // ReSharper disable Unity.PerformanceAnalysis
+    void setPath()
+    {
+        // bool pathIntact = true;
+        
+        // tells us there already is a path
+        
+        if (_currentPath != null)
+        {
+            foreach (Point2D point in _currentPath)
+            {
+                if (!worldScript.getPointState(point))
+                {
+                    worldScript.SetPointColor(point, Color.white);
+                }
+            }
+
+            if (worldScript.getPointState(_dynamicPath.start))
+            {
+                _dynamicPath.start = _currentPath[1];
+            }
+
+            if (worldScript.getPointState(_dynamicPath.end))
+            {
+                _dynamicPath.end = _currentPath[^2];
+            }
+        }
+
+        _currentPath = _dynamicPath.CreatePath();
+        
+        // Check if path exists
+        
+        if (_currentPath == null)
+        {
+            Debug.LogError("Path does not exist");
+            Destroy(gameObject);
+        }
+        else
+        {
+            foreach (Point2D point in _currentPath)
+            {
+                worldScript.SetPointColor(point, Color.magenta);
+            }
+            
+            RectTransform startPointTransform = _worldStateGameObjects[_currentPath.First()].GetComponent<RectTransform>();
+            _baTransform.localPosition = startPointTransform.localPosition;
+
+            this.transform.SetParent(targetCanvas.transform, false);
+            this.transform.SetAsLastSibling();
+        }
     }
 
 }

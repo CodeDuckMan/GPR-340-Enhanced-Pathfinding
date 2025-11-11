@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class DynamicPath : MonoBehaviour
 {
     List<Point2D> path = new List<Point2D>();
-    Point2D start;
-    Point2D end;
+    public Point2D start;
+    public Point2D end;
 
     World world; 
     Path pathMaker = new Path();
@@ -15,8 +15,9 @@ public class DynamicPath : MonoBehaviour
     public Button pathingButton;
     public TMP_InputField startInput;
     public TMP_InputField goalInput;
+    public TMP_InputField wallInput;
 
-
+    public bool wallCreated = false;
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +26,7 @@ public class DynamicPath : MonoBehaviour
         pathingButton.onClick.AddListener(() => CreatePath());
         startInput.onSubmit.AddListener(ReadStartInput);
         goalInput.onSubmit.AddListener(ReadGoalInput);
+        wallInput.onSubmit.AddListener(createWall);
     }
 
     void ReadGoalInput(string userText) 
@@ -34,6 +36,10 @@ public class DynamicPath : MonoBehaviour
         {
             Debug.Log("Warning: coordinates are not valid");
         }
+        if (world.getPointState(end))
+        {
+            Debug.Log("Warning: there is a wall here");   
+        }
     }
 
     void ReadStartInput(string userText) 
@@ -42,6 +48,10 @@ public class DynamicPath : MonoBehaviour
         if (!world.IsValidPosition(ref start))
         {
             Debug.Log("Warning: coordinates are not valid");
+        }
+        if (world.getPointState(start))
+        {
+            Debug.Log("Warning: there is a wall here");   
         }
     }
 
@@ -68,5 +78,26 @@ public class DynamicPath : MonoBehaviour
             Debug.Log("Path Finished");
         }     
         return path;
+    }
+
+    void createWall(string userText)
+    {
+        Point2D wallCoords = ConvertInput.IntakeCoordinates(userText);
+
+        if (world.IsValidPosition(ref wallCoords) && !world.getPointState(wallCoords))
+        {
+            world.SetWallState(wallCoords, true);
+            wallCreated = true;
+            Debug.Log("Wall created");
+        }
+        else
+        {
+            Debug.Log("Warning: coordinates do not work");
+        }
+    }
+
+    public bool WallsChanged()
+    {
+        return wallCreated;
     }
 }
