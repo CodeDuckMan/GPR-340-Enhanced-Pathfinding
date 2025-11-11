@@ -34,27 +34,27 @@ public partial class World
     }
     public static Point2D NE(ref Point2D p)
     {
-        if (p.y % 2 == 1)
-            return new Point2D(p.x + 1, p.y - 1);
-        return new Point2D(p.x, p.y - 1);
+        if (Mathf.Abs(p.y) % 2 == 1) // If odd
+            return new Point2D(p.x + 1, p.y + 1);
+        return new Point2D(p.x, p.y + 1);
     }
     public static Point2D NW(ref Point2D p)
     {
-        if (p.y % 2 == 1)
-            return new Point2D(p.x, p.y - 1);
-        return new Point2D(p.x - 1, p.y - 1);
-    }
-    public static Point2D SE(ref Point2D p)
-    {
-        if (p.y % 2 == 1)
+        if (Mathf.Abs(p.y) % 2 == 1) // If odd
             return new Point2D(p.x, p.y + 1);
         return new Point2D(p.x - 1, p.y + 1);
     }
+    public static Point2D SE(ref Point2D p)
+    {
+        if (Mathf.Abs(p.y) % 2 == 1)  // If odd
+            return new Point2D(p.x, p.y - 1);
+        return new Point2D(p.x - 1, p.y - 1);
+    }
     public static Point2D SW(ref Point2D p)
     {
-        if (p.y % 2 == 1)
-            return new Point2D(p.x + 1, p.y + 1);
-        return new Point2D(p.x, p.y + 1);
+        if (Mathf.Abs(p.y) % 2 == 1) // If odd
+            return new Point2D(p.x + 1, p.y - 1);
+        return new Point2D(p.x, p.y - 1);
     }
     
     // Bool checks
@@ -198,17 +198,29 @@ public partial class World
 
     }
 
+    public void SetWallState(Point2D point, bool isBlocked)
+    {
+        this.worldStateHash[point] = isBlocked;
+        SetPointColor(point, Color.gray);
+    }
+    
     private void DrawGrid()
     {
-        for (int x = -sideSize / 2; x < sideSize / 2; x++)
+        for (int x = -sideSize / 2; x < (sideSize / 2) + 1; x++)
         {
-            for (int y = -sideSize / 2;  y < sideSize / 2; y++)
+            for (int y = -sideSize / 2;  y < (sideSize / 2) + 1; y++)
             {
                 if (y % 2 == 0)
                     CreateHexagonOnPoint(x,y);
                 
                 else
                     CreateHexagonOnPoint(x + 0.5,y);
+                
+                int randChance = UnityEngine.Random.Range(0, 100);
+                if (randChance <= wallSpawnChance)
+                    SetWallState(new Point2D(x, y), true);
+                    
+                
             }
         }
     }

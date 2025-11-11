@@ -14,7 +14,6 @@ public class BallAgent : MonoBehaviour
     public Canvas targetCanvas;
     private Dictionary<Point2D, GameObject> _worldStateGameObjects;
     [SerializeField] private World worldScript;
-    [SerializeField] private GameObject targetPoint;
     private List<Point2D> _currentPath;
     private Point2D _currentTargetPoint;
     private Point2D _nextPointOnPath;
@@ -95,10 +94,7 @@ public class BallAgent : MonoBehaviour
         }
 
         _baTransform.position = Vector3.MoveTowards(_baTransform.position, _worldStateGameObjects[_nextPointOnPath].transform.position, speed * Time.deltaTime);
-
-
-        targetPoint.transform.position = _worldStateGameObjects[_nextPointOnPath].transform.position;
-
+        
     }
 
 }

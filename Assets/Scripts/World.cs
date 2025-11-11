@@ -12,6 +12,7 @@ public partial class World : MonoBehaviour
     
     public int newSideSize = 11;
     public float hexagonSize = 100;
+    public int wallSpawnChance = 10;
     
     // true means that the hex is blocked
     private Dictionary<Point2D, bool> worldStateHash;
@@ -28,7 +29,7 @@ public partial class World : MonoBehaviour
         CheckSideSize();
         
         DrawGrid();
-
+        
         Point2D somePoint = new Point2D(0, 0);
         List<Point2D> valid = GetEmptyNeighbors(somePoint);
 
