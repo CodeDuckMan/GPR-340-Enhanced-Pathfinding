@@ -149,6 +149,7 @@ public partial class World
         
         return closestPoint; 
     }
+
     public Point2D GetClosestPointOnPath(RectTransform pointPosition, List<Point2D> path, Dictionary<Point2D, GameObject> gameObjectsByPoint2D)
     {
         Point2D closestPoint = new Point2D();
@@ -170,6 +171,17 @@ public partial class World
         }
         
         return closestPoint;
+    }
+
+    public double GetDistanceFromPoint(RectTransform testedPosition, Point2D targetPoint, Dictionary<Point2D, GameObject> gameObjectsByPoint2D)
+    {
+        double distance = 0;
+        
+        double numX = gameObjectsByPoint2D[targetPoint].transform.position.x - testedPosition.position.x;
+        double numY = gameObjectsByPoint2D[targetPoint].transform.position.y - testedPosition.position.y;
+        distance = Math.Sqrt(numX * numX + numY * numY);
+
+        return distance;
     }
 
     public void SetPointColor(Point2D point, Color color)
