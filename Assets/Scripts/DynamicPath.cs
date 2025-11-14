@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class DynamicPath : MonoBehaviour
@@ -93,6 +94,18 @@ public class DynamicPath : MonoBehaviour
         else
         {
             Debug.Log("Warning: coordinates do not work");
+        }
+    }
+
+    public void checkInput(Vector2 mouseClick, Dictionary<Point2D, GameObject> tiles)
+    {
+        Point2D mousePos = new Point2D((int)mouseClick.x, (int)mouseClick.y);
+        foreach (Point2D point in tiles.Keys)
+        {
+            if (mousePos.Equals(point))
+            {
+                Debug.Log("Point works :)");
+            }
         }
     }
 
