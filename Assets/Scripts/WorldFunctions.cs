@@ -126,6 +126,29 @@ public partial class World
 
         return false;
     }
+
+    public Point2D GetClosestPoint(RectTransform testedPosition, Dictionary<Point2D, GameObject> gameObjectsByPoint2D)
+    {
+        Point2D closestPoint = new Point2D();
+        
+        float closestDistance = float.MaxValue;
+        float distance = 0;
+
+        foreach (KeyValuePair<Point2D, GameObject> pair in gameObjectsByPoint2D)
+        {
+            float numX = pair.Value.transform.position.x - testedPosition.position.x;
+            float numY = pair.Value.transform.position.y - testedPosition.position.y;
+            distance = (float)Math.Sqrt((double) numX * (double) numX + (double) numY * (double) numY);
+
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestPoint = pair.Key;
+            }
+        }
+        
+        return closestPoint; 
+    }
     public Point2D GetClosestPointOnPath(RectTransform pointPosition, List<Point2D> path, Dictionary<Point2D, GameObject> gameObjectsByPoint2D)
     {
         Point2D closestPoint = new Point2D();
