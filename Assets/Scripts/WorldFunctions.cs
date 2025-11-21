@@ -207,7 +207,7 @@ public partial class World
         worldStateHash[thePoint] = false;
         
         // Create new GameObject
-        GameObject newHexagonGameObject = new GameObject("Hexagon: " + Math.Floor(x) + ", " + Math.Floor(y));
+        GameObject newHexagonGameObject = new GameObject( Math.Floor(x) + ", " + Math.Floor(y));
         worldStateGameObjects[thePoint] = newHexagonGameObject;
         
         // Add image component
@@ -215,6 +215,9 @@ public partial class World
         
         // Adding a collider
         Collider2D newCollider =  newHexagonGameObject.AddComponent<PolygonCollider2D>();
+        
+        // Adding a collider hit script
+        HexCollider hexCollider = newHexagonGameObject.AddComponent<HexCollider>();
         
         // Check for sprite
         if (hexagonSprite != null)
