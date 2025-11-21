@@ -213,10 +213,19 @@ public partial class World
         // Add image component
         Image newImage = newHexagonGameObject.AddComponent<Image>();
         
+        // Adding a collider
+        Collider2D newCollider =  newHexagonGameObject.AddComponent<PolygonCollider2D>();
+        
         // Check for sprite
         if (hexagonSprite != null)
         {
             newImage.sprite = hexagonSprite;
+            
+            // editing the polygon collider to fit the game-object. 
+            PolygonCollider2D polyCollider2D = newHexagonGameObject.GetComponent<PolygonCollider2D>();
+            Vector2[] points = new Vector2[6];
+            createCollider(points);
+            polyCollider2D.SetPath(0, points);
         }
         else
         {
@@ -260,5 +269,18 @@ public partial class World
         }
     }
 
-    
+    void createCollider(Vector2[] points)
+    {
+        // this is for the hexagon collider specifically.
+        if (points.Length == 6)
+        {
+            points[0] = new Vector2(0,15);
+            points[1] = new Vector2(-13,7.5f);
+            points[2] = new Vector2(-13,-7.5f);
+            points[3] = new Vector2(0,-15);
+            points[4] = new Vector2(13,-7.5f);
+            points[5] = new Vector2(13,7.5f);
+        }
+    }
+
 }

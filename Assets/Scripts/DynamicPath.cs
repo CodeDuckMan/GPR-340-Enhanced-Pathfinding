@@ -107,6 +107,8 @@ public class DynamicPath : MonoBehaviour
                 Debug.Log("Point works :)");
             }
         }
+        
+        Debug.Log("oberon");
     }
 
     public bool WallsChanged()
